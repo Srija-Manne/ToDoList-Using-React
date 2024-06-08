@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Todo from './Todo';
+import './App.css'; 
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [task, setTask] = useState("");
+    const [todos, setTodos] = useState([]);
+
+    const changeHandler = (e) => {
+        setTask(e.target.value);
+    }
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+        if (task.trim()) { 
+            const newTodos = [...todos, task];
+            setTask('');
+            setTodos(newTodos);
+        }
+    }
+
+    const deleteHandler = (index) => {
+        const newTodos = todos.filter((todo, i) => i !== index);
+        setTodos(newTodos);
+    }
+
+    return (
+        <div className="container">
+            <form onSubmit={submitHandler}>
+                <input 
+                    type="text" 
+                    value={task} 
+                    onChange={changeHandler} 
+                />
+                <button type="submit">Add</button>
+            </form>
+            <Todo todos={todos} deleteHandler={deleteHandler}/>
+        </div>
+    );
 }
 
 export default App;
